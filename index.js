@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const port = 3000;
-const products = require("./models/products");
+const productRoutes = require('./routes/products');
 
 require('dotenv').config()
 
@@ -10,6 +10,7 @@ const mongoUrl = process.env.MONGO_URL
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.use('/products', productRoutes)
 
 
 
@@ -31,7 +32,7 @@ mongoose
   app.use('/products', productRoutes);
 
   app.get('/', async (req, res) => {
-      res.json({message: 'Get all products'});
+      res.json({message: 'Welcome to the coffee shop'});
   });
 
   app.listen(port, () => {
