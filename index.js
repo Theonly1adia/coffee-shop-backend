@@ -2,7 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const productRoutes = require('./routes/product');
 const authRoutes = require('./routes/auth');
+const userRoutes= require('./routes/users');
 const auth = require('./middleware/auth');
+const errorHandler = require('./middleware/errorHandler');
 const app = express();
 const port = 3004;
 
@@ -12,7 +14,7 @@ const mongoUrl = process.env.MONGO_URL
 
 // Middleware to parse JSON bodies
 app.use(express.json());
-/* app.use('/product', productRoutes) */
+
 
 
 // Connect to MongoDB
@@ -31,9 +33,10 @@ mongoose
   // Use the product and auth routes
 app.use('/product', productRoutes);
 app.use('/auth', authRoutes);
+app.use('/users', auth, userRoutes);
 
-// Protect product routes
-app.use('/product', auth, productRoutes);
+// Use the error handling middleware
+app.use(errorHandler);
   
   app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
