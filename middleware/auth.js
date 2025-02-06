@@ -16,12 +16,14 @@ const auth = (req, res, next) => {
 
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');
+    req.user = decoded.role;
+    req.userID = decoded.userID
     req.user = decoded;
 
     // Call the next middleware or route handler
     next();
   } catch (error) {
-    res.status(400).json({ error: 'Invalid token.' });
+    res.status(401).json({ error: 'Invalid token.' });
   }
 };
 

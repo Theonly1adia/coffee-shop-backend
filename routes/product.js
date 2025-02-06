@@ -1,6 +1,7 @@
-const Router = require('express').Router;
-const router = Router();
+const express = require('express');
+const router = express.Router();
 const Product = require('../models/product'); //Import product model
+const upload = require('.../middleware/upload');
 
 // Get all products
 router.get('/', async (req, res) => {
@@ -40,6 +41,49 @@ router.post('/', async (req, res) => {
     res.status(201).json(savedProduct);
   } catch (error) {
     res.status(400).json({error: error.message});
+  }
+});
+
+// Create a new product with image upload
+router.post('/', upload, async (req, res) => {
+  try {
+    const { name, description, price, category, stock } = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : '';
+    const product = new Product({
+      name,
+      description,
+      price,
+      category,
+      stock,
+      imageUrl,
+    });
+    await product.save();
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Get all products with pagination
+router.get('/', async (req, res) => {
+  try {
+    const {
+      page = 1,
+      limit = 10,
+      category,
+      sortBy,
+      sortOrder = 'asc',
+    } = req.query;
+    const filter = category ? { category } : {};
+    const sort = sortBy ? { [sortBy]: sortOrder === 'asc' ? 1 : -1 } : {};
+    const products = await Product.find(filter)
+      .sort(sort)
+      .limit(parseInt(limit))
+      .skip((page - 1) * limit);
+    const total = await Product.countDocuments(filter);
+    res.json({ total, products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
