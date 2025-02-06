@@ -5,6 +5,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes= require('./routes/users');
 const auth = require('./middleware/auth');
 const errorHandler = require('./middleware/errorHandler');
+const upload = require('./middleware/upload');
 const app = express();
 const port = 3004;
 
