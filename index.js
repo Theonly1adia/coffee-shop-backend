@@ -16,7 +16,8 @@ const mongoUrl = process.env.MONGO_URL
 app.use(express.json());
 
 // Serve static files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+/* app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); */
+app.use('/uploads', express.static('/tmp'));
 
 
 
