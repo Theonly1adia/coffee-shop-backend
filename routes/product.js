@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Product = require('../models/product'); //Import product model
-const upload = require('.../middleware/upload');
+const Product = require('../models/Product'); //Import product model
+const upload = require('../../middleware/upload');
+
+
 
 // Get all products
 router.get('/', async (req, res) => {
